@@ -32,7 +32,7 @@
 
 #define STATE_SHIFT 13
 #define SEC_SHIFT 13
-#define OUT_SCALE 6
+#define OUT_SCALE 0
 #define MWSPT_NSEC 5
 const int NL[MWSPT_NSEC] = { 1,3,1,3,1 };
 const short NUM[MWSPT_NSEC][3] = {
@@ -87,11 +87,9 @@ int iir_sos(short xn, int section){
 	int scaleIndex = 2*section;
 	int sectionIndex = scaleIndex + 1;
 	wn0 = (NUM[scaleIndex][0]*xn - DEN[sectionIndex][1]*wn1 - DEN[sectionIndex][2]*wn2);
-	wn0 = (wn0 >> STATE_SHIFT) & 0xffff;
-	//wn0 = (wn0 >> STATE_SHIFT);
+	wn0 = (wn0 >> STATE_SHIFT);
 	yn = (DEN[sectionIndex][0]*wn0 + DEN[sectionIndex][1]*wn1 + DEN[sectionIndex][2]*wn2);
-	yn = (yn >> SEC_SHIFT) & 0xffff;
-	//yn = (yn >> SEC_SHIFT);
+	yn = (yn >> SEC_SHIFT);
 	push(wnL[section],(short)wn0);
 	return yn;
 }
@@ -102,7 +100,7 @@ short iirL(short xn){
 	int input = xn;
 	int yn;
 	for(section = 0; section < ORDER; section ++){
-		yn = iir_sos(input,section);
+		yn = iir_sos((short)input,section);
 		input = yn;
 	}
 	return (short)(yn << OUT_SCALE);
