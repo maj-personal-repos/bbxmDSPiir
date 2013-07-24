@@ -32,7 +32,7 @@
 
 #define STATE_SHIFT 13
 #define SEC_SHIFT 13
-#define OUT_SCALE 0
+#define OUT_SCALE 5
 #define MWSPT_NSEC 5
 const int NL[MWSPT_NSEC] = { 1,3,1,3,1 };
 const short NUM[MWSPT_NSEC][3] = {
