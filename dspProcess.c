@@ -116,7 +116,7 @@ int dspBlockProcess(short *outputBuffer, short *inputBuffer, int samples, int * 
 	else if(*filter_on == 1) { // filter
 		for (i=0; i < samples; i+=2){
 			outputBuffer[i] = (short)(iirL(inputBuffer[i]));
-			outputBuffer[i+1] = inputBuffer[i+1]);
+			outputBuffer[i+1] = inputBuffer[i+1];
 		}
 	}
 	return DSP_PROCESS_SUCCESS;
