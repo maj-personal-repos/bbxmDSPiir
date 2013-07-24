@@ -34,6 +34,7 @@
 #define SEC_SHIFT 13
 #define OUT_SCALE 5
 #define MWSPT_NSEC 5
+
 const int NL[MWSPT_NSEC] = { 1,3,1,3,1 };
 const short NUM[MWSPT_NSEC][3] = {
   {
@@ -87,9 +88,9 @@ int iir_sos(short xn, int section){
 	int scaleIndex = 2*section;
 	int sectionIndex = scaleIndex + 1;
 	wn0 = (NUM[scaleIndex][0]*xn - DEN[sectionIndex][1]*wn1 - DEN[sectionIndex][2]*wn2);
-	wn0 = (wn0 >> STATE_SHIFT);
+	wn0 = (wn0 >> STATE_SHIFT) & 0xffff;
 	yn = (DEN[sectionIndex][0]*wn0 + DEN[sectionIndex][1]*wn1 + DEN[sectionIndex][2]*wn2);
-	yn = (yn >> SEC_SHIFT);
+	yn = (yn >> SEC_SHIFT)& 0xffff;
 	push(wnL[section],(short)wn0);
 	return yn;
 }
@@ -115,7 +116,7 @@ int dspBlockProcess(short *outputBuffer, short *inputBuffer, int samples, int * 
 	else if(*filter_on == 1) { // filter
 		for (i=0; i < samples; i+=2){
 			outputBuffer[i] = (short)(iirL(inputBuffer[i]));
-			outputBuffer[i+1] = (short)(iirL(inputBuffer[i]));
+			outputBuffer[i+1] = inputBuffer[i+1]);
 		}
 	}
 	return DSP_PROCESS_SUCCESS;
